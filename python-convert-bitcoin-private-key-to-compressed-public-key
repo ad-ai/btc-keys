@@ -1,0 +1,16 @@
+# -*- coding: cp1252 -*-
+import ecdsa
+
+private_key = "ADC41B25319CEB26111DD1745DDDF76F270F4B1A0B3964BF673B53FDD0C710B3" #this was randomly generated
+sk = ecdsa.SigningKey.from_string(private_key.decode("hex"), curve = ecdsa.SECP256k1)
+vk = sk.verifying_key
+key_bytes = vk.to_string()
+key_hex = key_bytes.encode("hex")
+key_string=key_hex.decode('utf-8')
+half_len=len(key_hex) // 2
+key_half=key_hex[:half_len]
+last_byte=int(key_string[-1],16)
+bitcoin_byte=b'02' if last_byte % 2 == 0 else b'03'
+
+
+public_key_c = bitcoin_byte+key_half   
